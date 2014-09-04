@@ -5,7 +5,7 @@ class APTChecker
 {
     private $whitelist = array();
     private $aptlists = array();
-    private $codenames = array( 'debian', 'stable', 'unstable', 'beta', 'hardy', 'intrepid', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'raring' );
+    private $codenames = array( 'gutsy', 'hardy', 'intrepid', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'raring', 'saucy', 'trusty', 'utopic', 'debian', 'squeeze', 'stable', 'unstable', 'beta' );
     private $codename;
 
     function __construct()
@@ -13,7 +13,7 @@ class APTChecker
         $this->codename = exec('lsb_release -cs');
 
         $this->addSourceLists( '/etc/apt/sources.list' );
-        $this->addSourceLists( '/etc/apt/sources.list.d/*.list' );        
+        $this->addSourceLists( '/etc/apt/sources.list.d/*.list' );
     }
 
     public function addSourceLists( $filemask )
@@ -65,12 +65,23 @@ class APTChecker
     public function parseDebLine( $line )
     {
         $parts = explode(' ', $line);
-        $result = array(
-            'type' => $parts[0],
-            'url' => $parts[1],
-            'distr' => $parts[2],
-            'components' => array_slice($parts, 3),
-        );
+        if ( $parts[1]{0} == '[' ) {
+            $result = array(
+                'type' => $parts[0],
+                'attributes' => $parts[1],
+                'url' => $parts[2],
+                'distr' => $parts[3],
+                'components' => array_slice($parts, 4),
+            );
+        } else {
+            $result = array(
+                'type' => $parts[0],
+                'attributes' => '',
+                'url' => $parts[1],
+                'distr' => $parts[2],
+                'components' => array_slice($parts, 3),
+            );
+        }
         return $result;
     }
 
@@ -78,8 +89,9 @@ class APTChecker
         $answer = array();
         stream_context_set_default( array(
             'http' => array(
-                'method' => 'HEAD'
-            )
+                'method' => 'HEAD',
+                'timeout' => 5.0,
+            ),
         ) );
         $result = get_headers( $url, 1 );
         $status_line = $result[0];
@@ -90,8 +102,8 @@ class APTChecker
 
         stream_context_set_default( array(
             'http' => array(
-                'method' => 'GET'
-            )
+                'method' => 'GET',
+            ),
         ) );
 
         return ( $status == '200' );
@@ -104,7 +116,7 @@ class APTChecker
         preg_match_all('/<a [^>]*href="?([^" ]+)"?[^>]*>/i', $list, $matches);
         $result = array();
         foreach ($matches[1] as $match) {
-            if ($match{0} != '?' && $match{0} != '/' && substr($match, -1) == '/') {
+            if ($match{0} != '?' && $match{0} != '/' && substr($match, -1) == '/' && $match != '../' ) {
                 $result[] = substr($match, 0, -1);
             }
         }
@@ -117,10 +129,13 @@ class APTChecker
 
         $result = array();
         foreach ( array_unique( array_merge( $this->codenames, $additional ) ) as $codename ) {
-            $try_url = $baseurl . '/dists/' . $codename . '/Release';
-            $exists = $this->tryFetch( $try_url );
-            if ( $exists !== false ) {
-                $result[] = $codename;
+            foreach ( array( 'InRelease', 'Release', 'Release.gpg' ) as $filename ) {
+                $try_url = $baseurl . '/dists/' . $codename . '/' . $filename;
+                $exists = $this->tryFetch( $try_url );
+                if ( $exists !== false ) {
+                    $result[] = $codename;
+                    break;
+                }
             }
         }
         return $result;
@@ -140,9 +155,9 @@ class APTChecker
         return $result;
     }
 
-    public function analyzeDebs()
+    public function analyzeDebs( $debs = null, $progress = null )
     {
-        $debs = $this->parseLists();
+        if (is_null($debs)) $debs = $this->parseLists();
         $result = array();
         foreach ( $debs as $deb ) {
             $info = $this->parseDebLine( $deb['data'] );
@@ -153,35 +168,9 @@ class APTChecker
                     'info'   => $info,
                     'server' => $serverinfo,
                 );
-                echo 'Mismatching distribution ' . $info['distr'] . ' in ' . $deb['line'] . '@' . $deb['file'] . PHP_EOL;
-                echo 'Available dists: ' . implode(', ', $this->getAvailDists( $info['url'], $info['distr'] ) ) . PHP_EOL;
             }
             if ($this->isRoot()) $this->getKeyId($info['url'], $info['distr']);  // cache key-id
-        }
-        return $result;
-    }
-
-    public function getAvailDists( $url, $expect = false )
-    {
-        if ( $expect === false ) $expect = $this->codename;
-        $list = @file_get_contents($url.'/dists');
-        if ( $list === false ) {
-            // TODO: Build URL for private PPAs (trailing slash in $expect)
-            $try_url = rtrim( $url, '/' ) . '/dists/' . $expect . '/Release';
-            echo 'Dirlisting denied. Trying: ' . $try_url . PHP_EOL;
-            $pkgfile = @file_get_contents( $try_url );
-            if ( $pkgfile === false ) {
-                return array( '404 NOT FOUND!! or error while fetching.' );
-            }
-            return array( '[' . $expect . ']' );
-        }
-        preg_match_all('/<a [^>]*href="?([^" ]+)"?[^>]*>/i', $list, $matches);
-        $result = array();
-        foreach ($matches[1] as $match) {
-            if ($match{0} != '?' && $match{0} != '/' && substr($match, -1) == '/') {
-                $dist_code = substr($match, 0, -1);
-                $result[] = (($dist_code==$this->codename)?strtoupper( $dist_code ):$dist_code);
-            }
+            if (!is_null($progress)) call_user_func($progress);
         }
         return $result;
     }
@@ -214,11 +203,25 @@ class APTChecker
         return $result;
     }
 
-
+    public function outputResults( $debinfo ) {
+        foreach ( $debinfo as $di ) {
+            echo 'Mismatching distribution "' . $di['info']['distr'] . '" in ' . $di['deb']['file'] . ':' . $di['deb']['line'] . PHP_EOL;
+            $better = array();
+            $current = array_search( $di['info']['distr'], $this->codenames );
+            foreach ( $di['server']['dists'] as $dist_avail ) {
+                $where = array_search( $dist_avail, $this->codenames );
+                if ( $where === false || $where > $current ) {
+                    $better[] = $dist_avail;
+                }
+            }
+            //echo 'Available: ' . implode( ', ', $di['server']['dists'] ) . PHP_EOL;
+            if ( count( $better ) > 0 ) echo 'Possibly better matches: ' . implode( ', ', $better ) . PHP_EOL;
+        }
+    }
 }
 
 $ac = new APTChecker();
-$ac->addWhitelist( array( 'stable', 'unstable' ) );
+$ac->addWhitelist( array( 'stable', 'unstable', 'beta' ) );
 
 echo 'System: ' . $ac->getCodename() . PHP_EOL;
 
@@ -239,8 +242,9 @@ if ( $ac->isRoot() ) {
     echo 'Not started as root. Will not check GPG keys.' . PHP_EOL;
 }
 
-$debinfo = $ac->analyzeDebs( $debs );
-print_r( $debinfo );
+$debinfo = $ac->analyzeDebs( $debs, 'progressInd' );
+echo PHP_EOL;
+$ac->outputResults( $debinfo );
 
 if ( $ac->isRoot() ) {
     foreach ( $keycache as $url=>$dists ) {
@@ -258,10 +262,11 @@ if ( !$ac->isRoot() ) echo ' (Run as root to import missing PPA keys.)';
 echo PHP_EOL;
 exit;
 
+function progressInd() {
+    echo '.';
+}
 
 function checkCurrentDist($url) {
     $fullurl = 'http://linux.getdropbox.com/ubuntu/dists/jaunty/main/binary-i386/Packages.gz';
 }
 
-
-?>
