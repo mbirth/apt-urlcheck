@@ -5,7 +5,8 @@ class APTChecker
 {
     private $whitelist = array();
     private $aptlists = array();
-    private $codenames = array( 'gutsy', 'hardy', 'intrepid', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'raring', 'saucy', 'trusty', 'utopic', 'debian', 'squeeze', 'stable', 'unstable', 'beta' );
+    private $codenames_old = array( 'gutsy', 'hardy', 'intrepid' );
+    private $codenames = array( 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'raring', 'saucy', 'trusty', 'utopic', 'vivid', 'wily', 'debian', 'squeeze', 'stable', 'unstable', 'beta' );
     private $codename;
 
     function __construct()
