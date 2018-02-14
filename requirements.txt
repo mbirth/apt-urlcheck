@@ -1,0 +1,3 @@
+# Install via aptitude, pip doesn't work!
+python-apt
+python-distutils-extra
