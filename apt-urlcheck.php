@@ -5,8 +5,8 @@ class APTChecker
 {
     private $whitelist = array();
     private $aptlists = array();
-    private $codenames_old = array( 'gutsy', 'hardy', 'intrepid' );
-    private $codenames = array( 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'raring', 'saucy', 'trusty', 'utopic', 'vivid', 'wily', 'debian', 'squeeze', 'stable', 'unstable', 'beta' );
+    private $codenames_old = array( 'gutsy', 'hardy', 'intrepid', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'raring', 'saucy', 'trusty', 'utopic', 'vivid', 'wily' );
+    private $codenames = array( 'devel', 'xenial', 'yakkety', 'zesty', 'artful', 'bionic', 'debian', 'squeeze', 'stable', 'unstable', 'beta' );
     private $codename;
 
     function __construct()
@@ -112,15 +112,20 @@ class APTChecker
 
     private function tryGetDirectoryListing( $url )
     {
+        $all_known_codenames = array_merge($this->codenames_old, $this->codenames);
         $list = @file_get_contents( $url );
         if ( $list === false ) return false;
-        preg_match_all('/<a [^>]*href="?([^" ]+)"?[^>]*>/i', $list, $matches);
+        preg_match_all('/<a .*?href=[\'"]?([^\'"]+)[\'"]?.*?>/i', $list, $matches);
+        #print_r($matches);
         $result = array();
         foreach ($matches[1] as $match) {
-            if ($match{0} != '?' && $match{0} != '/' && substr($match, -1) == '/' && $match != '../' ) {
+            if ($match{0} != '?' && $match{0} != '/' && substr($match, -1) == '/' && $match != '../' && substr($match, 0, 4) != 'http') {
                 $result[] = substr($match, 0, -1);
+            } elseif (in_array($match, $all_known_codenames) || in_array(substr($match, 0, -1), $all_known_codenames)) {
+                $result[] = $match;
             }
         }
+        #print_r($result);
         return array_unique( $result );
     }
 
@@ -205,12 +210,13 @@ class APTChecker
     }
 
     public function outputResults( $debinfo ) {
+        $all_codenames = array_merge( $this->codenames_old, $this->codenames );
         foreach ( $debinfo as $di ) {
             echo 'Mismatching distribution "' . $di['info']['distr'] . '" in ' . $di['deb']['file'] . ':' . $di['deb']['line'] . PHP_EOL;
             $better = array();
-            $current = array_search( $di['info']['distr'], $this->codenames );
+            $current = array_search( $di['info']['distr'], $all_codenames );
             foreach ( $di['server']['dists'] as $dist_avail ) {
-                $where = array_search( $dist_avail, $this->codenames );
+                $where = array_search( $dist_avail, $all_codenames );
                 if ( $where === false || $where > $current ) {
                     $better[] = $dist_avail;
                 }
