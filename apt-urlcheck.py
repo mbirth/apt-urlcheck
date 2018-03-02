@@ -79,14 +79,16 @@ def try_url_probing(url: str, current_codename: str) -> list:
     test_set = codenames + codenames_okay
     valid_matches = []
     for codename in test_set:
+        mcodename = mutate_codename(current_codename, codename)
+        print(ansi.SCP + mcodename, end="", flush=True)
         for filename in ["InRelease", "Release", "Release.gpg"]:
-            mcodename = mutate_codename(current_codename, codename)
             try_url = "{}/{}/{}".format(url, mcodename, filename)
             print(".", end="", flush=True)
             result = requests.get(try_url)
             if result.status_code == 200:
                 valid_matches.append(mcodename)
                 break
+        print(ansi.RCP + ansi.EL, end="", flush=True)
     probe_cache[cache_key] = valid_matches
     return probe_cache[cache_key]
 
@@ -105,7 +107,7 @@ for src in check_sources:
     test_url = src.uri + "/dists"
     more_options = try_fetch_dirlisting(test_url)
     if not more_options:
-        print("Listing failed. Probing", end="", flush=True)
+        print("Listing failed. Probing: ", end="", flush=True)
         more_options = try_url_probing(test_url, src.dist)
         print(" OK")
         print(ansi.UP_DEL, end="")

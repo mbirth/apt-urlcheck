@@ -14,6 +14,11 @@ if SYSTEM == "Windows":
         pass
 
 UP_DEL = u"\u001b[F\u001b[K"
+SCP = u"\u001b[s"
+RCP = u"\u001b[u"
+EL = u"\u001b[K"
+EL_LEFT = u"\u001b[1K"
+EL_ALL = u"\u001b[2K"
 BLACK = u"\u001b[0;30m"
 RED_DARK = u"\u001b[0;31m"
 GREEN_DARK = u"\u001b[0;32m"
