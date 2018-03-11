@@ -209,16 +209,13 @@ def filter_better_matches(found_codenames: list, current_codename: str) -> list:
     return better_codenames
 
 for src in check_sources:
-    print("{}: Outdated codename: {}".format(ansi.CYAN + os.path.basename(src.file) + ansi.RESET, ansi.RED + src.dist + ansi.RESET))
+    print("{}: {} → ".format(ansi.CYAN + os.path.basename(src.file) + ansi.RESET, ansi.RED + src.dist + ansi.RESET), end="")
     test_url = src.uri + "/dists"
     more_options = try_fetch_dirlisting(test_url)
     if not more_options:
-        print("Listing failed. Probing: ", end="", flush=True)
         more_options = try_url_probing(test_url, src.dist)
-        print(" OK")
-        print(ansi.UP_DEL, end="")
     better_options = filter_better_matches(more_options, src.dist)
     if better_options:
-        print("Possibly better options: {}".format(ansi.GREEN + (ansi.RESET + ", " + ansi.GREEN).join(better_options) + ansi.RESET))
+        print("{}".format(ansi.GREEN + (ansi.RESET + ", " + ansi.GREEN).join(better_options) + ansi.RESET))
     else:
-        print(ansi.SILVER + "No better match(es) found at the moment." + ansi.RESET)
+        print(ansi.SILVER + src.dist + ansi.RESET)
