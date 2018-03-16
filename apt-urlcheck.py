@@ -172,6 +172,13 @@ def get_probing_test_set(current_codename: str) -> list:
     # If nothing found, try 10 newest codenames
     return codenames[-10:]
 
+def fill_probe_cache(url: str, current_codename: str, candidates: list):
+    global probe_cache
+    probe_cache[url + "|" + current_codename] = candidates
+    while len(candidates) > 0:
+        codename = candidates.pop(0)
+        probe_cache[url + "|" + codename] = candidates
+
 def try_url_probing(url: str, current_codename: str) -> list:
     global probe_cache
     cache_key = url + "|" + current_codename
@@ -184,12 +191,13 @@ def try_url_probing(url: str, current_codename: str) -> list:
         print(ansi.SCP + mcodename, end="", flush=True)
         for filename in ["InRelease", "Release", "Release.gpg"]:
             try_url = "{}/{}/{}".format(url, mcodename, filename)
-            print(".", end="", flush=True)
+            print("?", end="", flush=True)
             result = requests.get(try_url)
             if result.status_code == 200:
                 valid_matches.append(mcodename)
                 break
         print(ansi.RCP + ansi.EL, end="", flush=True)
+    fill_probe_cache(url, current_codename, valid_matches)
     probe_cache[cache_key] = valid_matches
     return probe_cache[cache_key]
 
