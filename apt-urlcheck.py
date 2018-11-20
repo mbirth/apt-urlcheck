@@ -188,6 +188,10 @@ def try_url_probing(url: str, current_codename: str) -> list:
     valid_matches = []
     for codename in test_set:
         mcodename = mutate_codename(current_codename, codename)
+        cache_key = url + "|" + mcodename
+        if cache_key in probe_cache:
+            valid_matches += probe_cache[cache_key]
+            break
         print(ansi.SCP + mcodename, end="", flush=True)
         for filename in ["InRelease", "Release", "Release.gpg"]:
             try_url = "{}/{}/{}".format(url, mcodename, filename)
