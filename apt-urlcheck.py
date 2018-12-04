@@ -119,7 +119,7 @@ valid_sources = 0
 outdated_sources = 0
 check_sources = []
 for source in SourcesList():
-    if source.disabled or source.line == "\n":
+    if source.disabled or source.line == "\n" or source.line == "#\n":
         continue
     valid_sources += 1
     #print(".", end="", flush=True)
