@@ -18,49 +18,57 @@ codenames_okay = ["devel", "stable", "unstable", "beta", "preview", "testing", "
 
 releases = {
     "Ubuntu": {
-        "2004-10-26": "warty",
-        "2005-04-08": "hoary",
-        "2005-10-12": "breezy",
-        "2006-06-01": "dapper",
-        "2006-10-26": "edgy",
-        "2007-04-19": "feisty",
-        "2007-10-18": "gutsy",
-        "2008-04-24": "hardy",
-        "2008-10-30": "intrepid",
-        "2009-04-23": "jaunty",
-        "2009-10-29": "karmic",
-        "2010-04-29": "lucid",
-        "2010-10-10": "maverick",
-        "2011-04-28": "natty",
-        "2011-10-13": "oneiric",
-        "2012-04-26": "precise",
-        "2012-10-18": "quantal",
-        "2013-04-25": "raring",
-        "2013-10-17": "saucy",
-        "2014-04-17": "trusty",
-        "2014-10-23": "utopic",
-        "2015-04-23": "vivid",
-        "2015-10-22": "wily",
-        "2016-04-21": "xenial",
-        "2016-10-13": "yakkety",
-        "2017-04-13": "zesty",
-        "2017-10-19": "artful",
-        "2018-04-26": "bionic",
-        "2018-10-18": "cosmic",
-        "2019-04-30": "disco"
+        "2004-10-26": "warty",    # Warty Warthog
+        "2005-04-08": "hoary",    # Hoary Hedgehog
+        "2005-10-12": "breezy",   # Breezy Badger
+        "2006-06-01": "dapper",   # Dapper Drake
+        "2006-10-26": "edgy",     # Edgy Eft
+        "2007-04-19": "feisty",   # Feisty Fawn
+        "2007-10-18": "gutsy",    # Gutsy Gibbon
+        "2008-04-24": "hardy",    # Hardy Heron
+        "2008-10-30": "intrepid", # Intrepid Ibex
+        "2009-04-23": "jaunty",   # Jaunty Jackalope
+        "2009-10-29": "karmic",   # Karmic Koala
+        "2010-04-29": "lucid",    # Lucid Lynx
+        "2010-10-10": "maverick", # Maverick Meerkat
+        "2011-04-28": "natty",    # Natty Narwhal
+        "2011-10-13": "oneiric",  # Oneiric Ocelot
+        "2012-04-26": "precise",  # Precise Pangolin
+        "2012-10-18": "quantal",  # Quantal Quetzal
+        "2013-04-25": "raring",   # Raring Ringtail
+        "2013-10-17": "saucy",    # Saucy Salamander
+        "2014-04-17": "trusty",   # Trusty Tahr
+        "2014-10-23": "utopic",   # Utopic Unicorn
+        "2015-04-23": "vivid",    # Vivid Vervet
+        "2015-10-22": "wily",     # Wily Werewolf
+        "2016-04-21": "xenial",   # Xenial Xerus
+        "2016-10-13": "yakkety",  # Yakkety Yak
+        "2017-04-13": "zesty",    # Zesty Zapus
+        "2017-10-19": "artful",   # Artful Aardvark
+        "2018-04-26": "bionic",   # Bionic Beaver
+        "2018-10-18": "cosmic",   # Cosmic Cuttlefish
+        "2019-04-18": "disco",    # Disco Dingo
+        "2019-10-30": "eoan"      # Eoan Ermine
     },
     "Debian": {
-        "2000-08-14": "potato",
-        "2002-07-19": "woody",
-        "2005-06-06": "sarge",
-        "2007-04-08": "etch",
-        "2009-02-14": "lenny",
-        "2011-02-06": "squeeze",
-        "2013-05-04": "wheezy",
-        "2015-04-26": "jessie",
-        "2017-06-17": "stretch",
-        "2019-06-30": "buster",
-        "2999-12-31": "sid"      # unstable
+        "1996-06-17": "buzz",     # 1.1 - Buzz Lightyear
+        "1996-12-12": "rex",      # 1.2 - T-Rex
+        "1997-06-05": "bo",       # 1.3 - Bo Peep
+        "1998-07-24": "hamm",     # 2.0 - Piggy bank
+        "1999-03-09": "slink",    # 2.1 - Slinky Dog
+        "2000-08-14": "potato",   # 2.2 - Mr. Potato
+        "2002-07-19": "woody",    # 3.0 - Woody (Toys Cowboy)
+        "2005-06-06": "sarge",    # 3.1 - Searge (Toys Soldier)
+        "2007-04-08": "etch",     # 4.0 - Etch-a-Sketch
+        "2009-02-14": "lenny",    # 5.0 - Binoculars (Toys)
+        "2011-02-06": "squeeze",  # 6.0 - Toys Aliens
+        "2013-05-04": "wheezy",   # 7.0 - Penguin Toy
+        "2015-04-26": "jessie",   # 8.0 - Cowgirl
+        "2017-06-17": "stretch",  # 9.0 - Octopus toy (current stable)
+        "2019-06-30": "buster",   # 10.0 - Toys Dachshund
+        "2020-06-30": "bullseye", # 11.0 - Toys Horse
+        "2021-06-30": "bookworm", # 12.0 - worm with built-in flashlight
+        "2999-12-31": "sid"      # unstable (Still In Development)
     },
     "Mint": {
         "2006-08-27": "ada",
@@ -91,7 +99,8 @@ releases = {
         "2017-07-02": "sonya",
         "2017-11-27": "sylvia",
         "2018-06-30": "tara",
-        "2018-11-30": "tessa"
+        "2018-11-30": "tessa",
+        "2019-06-30": "tina"
     }
 }
 
