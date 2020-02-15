@@ -48,7 +48,8 @@ releases = {
         "2018-04-26": "bionic",   # Bionic Beaver
         "2018-10-18": "cosmic",   # Cosmic Cuttlefish
         "2019-04-18": "disco",    # Disco Dingo
-        "2019-10-30": "eoan"      # Eoan Ermine
+        "2019-10-17": "eoan",     # Eoan Ermine
+        "2020-04-30": "focal",    # Focal Fossa
     },
     "Debian": {
         "1996-06-17": "buzz",     # 1.1 - Buzz Lightyear
@@ -92,6 +93,7 @@ releases = {
         "2013-11-30": "petra",
         "2014-05-31": "qiana",
         "2014-11-29": "rebecca",
+        "2015-04-10": "betsy",  # LMDE 2 - Linux Mint Debian Edition
         "2015-06-30": "rafaela",
         "2015-12-04": "rosa",
         "2016-06-30": "sarah",
@@ -99,8 +101,11 @@ releases = {
         "2017-07-02": "sonya",
         "2017-11-27": "sylvia",
         "2018-06-30": "tara",
+        "2018-08-31": "cindy",   # LMDE 3 - Linux Mint Debian Edition
         "2018-11-30": "tessa",
-        "2019-06-30": "tina"
+        "2019-08-02": "tina",
+        "2019-12-18": "tricia",
+        "2021-12-31": "debbie",  # LMDE 4 - Linux Mint Debian Edition
     }
 }
 
