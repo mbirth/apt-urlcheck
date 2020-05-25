@@ -192,9 +192,10 @@ def get_probing_test_set(current_codename: str) -> list:
 def fill_probe_cache(url: str, current_codename: str, candidates: list):
     global probe_cache
     probe_cache[url + "|" + current_codename] = candidates
-    while len(candidates) > 0:
-        codename = candidates.pop(0)
-        probe_cache[url + "|" + codename] = candidates
+    candid = candidates.copy()
+    while len(candid) > 0:
+        codename = candid.pop(0)
+        probe_cache[url + "|" + codename] = candid
 
 def try_url_probing(url: str, current_codename: str) -> list:
     global probe_cache
