@@ -50,6 +50,7 @@ releases = {
         "2019-04-18": "disco",    # Disco Dingo
         "2019-10-17": "eoan",     # Eoan Ermine
         "2020-04-30": "focal",    # Focal Fossa
+        "2020-10-26": "groovy",   # Groovy Gorilla
     },
     "Debian": {
         "1996-06-17": "buzz",     # 1.1 - Buzz Lightyear
