@@ -50,7 +50,8 @@ releases = {
         "2019-04-18": "disco",    # Disco Dingo
         "2019-10-17": "eoan",     # Eoan Ermine
         "2020-04-30": "focal",    # Focal Fossa
-        "2020-10-26": "groovy",   # Groovy Gorilla
+        "2020-10-22": "groovy",   # Groovy Gorilla
+        "2021-04-22": "hirsute",  # Hirsute Hippo
     },
     "Debian": {
         "1996-06-17": "buzz",     # 1.1 - Buzz Lightyear
@@ -67,9 +68,9 @@ releases = {
         "2013-05-04": "wheezy",   # 7.0 - Penguin Toy
         "2015-04-26": "jessie",   # 8.0 - Cowgirl
         "2017-06-17": "stretch",  # 9.0 - Octopus toy (current stable)
-        "2019-06-30": "buster",   # 10.0 - Toys Dachshund
-        "2020-06-30": "bullseye", # 11.0 - Toys Horse
-        "2021-06-30": "bookworm", # 12.0 - worm with built-in flashlight
+        "2019-07-06": "buster",   # 10.0 - Toys Dachshund
+        "2021-06-30": "bullseye", # 11.0 - Toys Horse
+        "2023-06-30": "bookworm", # 12.0 - worm with built-in flashlight
         "2999-12-31": "sid"      # unstable (Still In Development)
     },
     "Mint": {
@@ -106,7 +107,9 @@ releases = {
         "2018-11-30": "tessa",
         "2019-08-02": "tina",
         "2019-12-18": "tricia",
-        "2021-12-31": "debbie",  # LMDE 4 - Linux Mint Debian Edition
+        "2020-03-20": "debbie",  # LMDE 4 - Linux Mint Debian Edition
+        "2020-06-27": "ulyana",
+        "2020-12-20": "ulyssa",
     }
 }
 
